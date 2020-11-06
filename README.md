@@ -15,6 +15,6 @@ Files:
 
 Contact:
 * Author: Christian Camilo Rosero Rodriguez
-* Intitution: Universidad del Valle
+* Intitution: Universidad del Valle, Cali - Colombia
 * Email: christian.camilo.rosero@correounivalle.edu.co
 
