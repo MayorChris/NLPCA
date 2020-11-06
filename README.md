@@ -1,6 +1,7 @@
 # NLPCA
 NLPCA - nonlinear PCA - Nonlinear principal component analysis based on an autoassociative neural network -Hierarchical nonlinear PCA (NLPCA) with standard bottleneck architecture
-Reference: Scholz and Vigario. Proceedings ESANN, 2002
+/n
+Reference:Scholz and Vigario. Proceedings ESANN, 2002
           www.nlpca.org
           Author: Matthias Scholz
 Files:
