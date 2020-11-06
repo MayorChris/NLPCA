@@ -13,3 +13,8 @@ Files:
 - Sklearn_NLPCA_Demo_Star_Data.ipynb: Demo for sklearn_nlpca.py
 - Star_Data.csv: file used in the demo
 
+Contact:
+* Author: Christian Camilo Rosero Rodriguez
+* Intitution: Universidad del Valle
+* Email: christian.camilo.rosero@correounivalle.edu.co
+
