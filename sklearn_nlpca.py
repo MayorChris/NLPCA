@@ -36,6 +36,7 @@ except:
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import check_random_state
@@ -354,6 +355,8 @@ class NLPCA(TransformerMixin, BaseEstimator):
     self._histories_val_loss=[]
     self._histories_cosine_similarity=[]
     self._histories_val_cosine_similarity=[]
+
+    self.data_train_ = shuffle(self.data_train_, random_state=0)
     
     self._network.compile(optimizer=self.opti_algoritm, loss=self._hierarchical_error, metrics='cosine_similarity')
 
@@ -387,7 +390,7 @@ class NLPCA(TransformerMixin, BaseEstimator):
                           epochs=10,
                           batch_size=self.batch,
                           shuffle=True,
-                          validation_data=(self.data_train_, self.data_train_),
+                          validation_split=0.1,
                           verbose = self.verbose, callbacks=callback_cp)
     
       print("Epoch {:d}/{:d}\n 10/10 [==============================] - loss: {:.5f} - similarity: {:.2f}% - val_loss: {:.5f} - val_similarity: {:.2f}%".format((e+1)*100,self.max_iteration,history.history['loss'][-1],history.history['cosine_similarity'][-1]*100,history.history['val_loss'][-1],history.history['val_cosine_similarity'][-1]*100))
@@ -580,11 +583,11 @@ class NLPCA(TransformerMixin, BaseEstimator):
       self._set_weights_linear()
 
 
-    # if self.n_jobs != None:
-    #   Parallel(n_jobs=self.n_jobs)(delayed(self._train)() for _ in range(self.n_jobs))
-    # else:
-    #   self._train()
-    self._train()
+    if self.n_jobs != None:
+      Parallel(n_jobs=self.n_jobs)(delayed(self._train)() for _ in range(self.n_jobs))
+    else:
+      self._train()
+    #self._train()
 
     net_layers = len(self._network.layers) # number of layers
     index_mask_layer = int((len(self._network.layers)/2))#index mask layer
