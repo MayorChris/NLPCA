@@ -305,7 +305,7 @@ class NLPCA(TransformerMixin, BaseEstimator):
       newValue=np.array([self._idx[:,i]])
       K.set_value(self._mask,newValue)
       E = self._loss(self._network, self.data_train_, self.data_train_, training=False)
-      Ex.append(E)
+      Ex.append(E.numpy())
 
     Eh=np.array(Ex)
     Eh=Eh*self._Coeficientes
@@ -357,8 +357,10 @@ class NLPCA(TransformerMixin, BaseEstimator):
     self._histories_val_cosine_similarity=[]
 
     self.data_train_ = shuffle(self.data_train_, random_state=0)
+
+    tf.executing_eagerly()
     
-    self._network.compile(optimizer=self.opti_algoritm, loss=self._hierarchical_error, metrics='cosine_similarity')
+    self._network.compile(optimizer=self.opti_algoritm, loss=self._hierarchical_error, metrics='cosine_similarity', run_eagerly=True)
 
     checkpoint_path = self.callbacks_path + "training/cp-{epoch:04d}.ckpt"
     checkpoint_dir = os.path.dirname(checkpoint_path)
