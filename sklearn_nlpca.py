@@ -305,12 +305,21 @@ class NLPCA(TransformerMixin, BaseEstimator):
       newValue=np.array([self._idx[:,i]])
       K.set_value(self._mask,newValue)
       E = self._loss(self._network, self.data_train_, self.data_train_, training=False)
-      Ex.append(E.numpy())
+      Ex.append(E)
 
-    Eh=np.array(Ex)
-    Eh=Eh*self._Coeficientes
+    # Eh=np.array(Ex)
+    # Eh=Eh*self._Coeficientes
+
+    # Eh0 = tf.concat(Ex, axis=0)
+    # Etotal0 = sum(Eh0)
     
-    Etotal = sum(Eh)
+    Eh = tf.stack(Ex, axis=0)
+    Eh=Eh*self._Coeficientes
+    Etotal = tf.reduce_sum(Eh, 0)
+
+    # print("Etotal")
+    # print(Etotal0)
+    # print(Etotal)
     return Etotal
 
   def _sort_component(self):
@@ -379,7 +388,10 @@ class NLPCA(TransformerMixin, BaseEstimator):
     else:
       callback_cp = None
 
-
+    
+    shuffle_seed = 10
+    self.data_train_ = tf.random.shuffle(self.data_train_, seed=shuffle_seed)
+    
     for e in range(int(self.max_iteration/100)):
       #Entrenamiento
       if e == 0:
@@ -387,6 +399,7 @@ class NLPCA(TransformerMixin, BaseEstimator):
         if self.callbacks == True:
           latest = tf.train.latest_checkpoint(checkpoint_dir)
           self._network.load_weights(latest)
+
       
       history = self._network.fit(self.data_train_, self.data_train_,
                           epochs=10,
